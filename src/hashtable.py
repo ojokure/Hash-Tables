@@ -63,7 +63,9 @@ class HashTable:
                     return
                 elif current_node.next:
                     current_node = current_node.next
-                    return
+
+                else:
+                    break
             current_node.next = LinkedPair(key, value)
 
     def remove(self, key):
@@ -74,10 +76,7 @@ class HashTable:
 
         Fill this in.
         '''
-        if key is None:
-            print("not found")
-        else:
-            del self.storage[key]
+        pass
 
     def retrieve(self, key):
         '''
@@ -87,11 +86,19 @@ class HashTable:
 
         Fill this in.
         '''
-        if key is None:
+        hashe = self._hash_mod(key)
+
+        if not self.storage[hashe]:
             return None
-        else:
-            res = self.storage[key]
-        return res
+
+        current_node = self.storage[hashe]
+        while current_node:
+            if current_node.key == key:
+                return current_node.value
+            elif current_node.next:
+                current_node = current_node.next
+            else:
+                return None
 
     def resize(self):
         '''
