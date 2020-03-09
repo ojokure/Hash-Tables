@@ -76,7 +76,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        hashe = self._hash_mod(key)
+
+        if not self.storage[hashe]:
+            print("no value found for this key")
+
+        current_node = self.storage[hashe]
+
+        while current_node:
+            if current_node.key == key:
+                del current_node.value
+                return
 
     def retrieve(self, key):
         '''
