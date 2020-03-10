@@ -51,12 +51,12 @@ class HashTable:
 
         Fill this in.
         '''
-        hashe = self._hash_mod(key)
-        if not self.storage[hashe]:
-            self.storage[hashe] = LinkedPair(key, value)
+        hash_index = self._hash_mod(key)
+        if not self.storage[hash_index]:
+            self.storage[hash_index] = LinkedPair(key, value)
 
         else:
-            current_node = self.storage[hashe]
+            current_node = self.storage[hash_index]
             while current_node:
                 if current_node.key == key:
                     current_node.value = value
@@ -73,20 +73,28 @@ class HashTable:
         Remove the value stored with the given key.
 
         Print a warning if the key is not found.
-
         Fill this in.
         '''
-        hashe = self._hash_mod(key)
+        hash_index = self._hash_mod(key)
 
-        if not self.storage[hashe]:
-            print("no value found for this key")
+        if self.storage[hash_index] is None:
+            print('Key not found')
+            return
 
-        current_node = self.storage[hashe]
+        previous_node = None
+        current_node = self.storage[hash_index]
 
         while current_node:
             if current_node.key == key:
-                del current_node.value
+                if previous_node is None:
+                    self.storage[hash_index] = None
+                    return
+
+                previous_node.next = current_node.next
                 return
+
+            previous_node = current_node
+            current_node = current_node.next
 
     def retrieve(self, key):
         '''
@@ -96,19 +104,20 @@ class HashTable:
 
         Fill this in.
         '''
-        hashe = self._hash_mod(key)
+        hash_index = self._hash_mod(key)
 
-        if not self.storage[hashe]:
+        if not self.storage[hash_index]:
             return None
 
-        current_node = self.storage[hashe]
+        current_node = self.storage[hash_index]
+
         while current_node:
             if current_node.key == key:
                 return current_node.value
             elif current_node.next:
                 current_node = current_node.next
-            else:
-                return None
+
+        return None
 
     def resize(self):
         '''
